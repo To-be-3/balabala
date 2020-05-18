@@ -8,9 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service("userService")
 public class UserServiceImpl implements UserService{
@@ -33,21 +33,32 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void delete(User user) {
-
+        userRepository.delete(user);
     }
 
     @Override
     public void deleteById(Integer uid) {
-
+        userRepository.deleteById(uid);
     }
 
+    @Transactional
     @Override
     public void deletes(List<User> users) {
-
+        for(User u:users){
+            delete(u);
+        }
     }
 
     @Override
     public User checkUser(UserLogin userLogin) {
+        User user=null;
+        Optional<User> optionalUser=userRepository.findByAccount(userLogin.getAccount());
+        if (optionalUser.isPresent()) {//判断Optional中是否包含目标对象
+            user=optionalUser.get();
+            if(user.getPassword().equals(userLogin.getPassword())){
+                return user;
+            }
+        }
         return null;
     }
 }
