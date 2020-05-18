@@ -22,6 +22,7 @@ public class User {
     @Column(length = 30)
     @NotNull
     private String password;
+    private Integer type=1;
     public enum Sex{
         男,女;//枚举中常量结束位置要有分号
         public static List<String> toList(){
