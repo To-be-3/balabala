@@ -11,10 +11,10 @@ import java.util.Optional;
 
 @Repository("userRepository")
 public interface UserRepository extends JpaRepository<User,Integer> {
-    @Query("select u from User u where account like ?1 or name like ?1 or mobile like ?1 or email like ?1")
+    @Query("select u from User u where account like ?1 or username like ?1 or phone like ?1 or email like ?1")
     public Page<User> findByKeyword(String keyword, Pageable pageable);
 
-    @Query("update User u set u.password=?1 where u.uid=?2")
+    @Query("update User u set u.password=?1 where u.userId=?2")
     public void modifyPassword(String password,Integer uid);
 
     //通过账号查询用户信息，获取唯一用户
